@@ -1,0 +1,25 @@
+body {
+    background-color: rgb(128, 128, 128, .75);
+}
+
+.container {
+    display: flex;
+    width: 500px;
+    height: 500px;
+    /* border: black 5px solid; */
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+}
+
+.grid-row {
+    flex: 1 0 0px;
+    /* border: red 3px solid; */
+    background-color: white;
+    display: flex;
+}
+
+.grid-element {
+    flex: 1 0 0px;
+    /* border: green 1px dashed; */
+}
