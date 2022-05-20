@@ -1,7 +1,7 @@
 const container = document.querySelector('.grid-container')
 addGrid();
-
-
+let mouseDown = false;
+let currentGridSize = 16;
 
 function addGrid(size = 16) {
     let gridElement;
@@ -45,7 +45,6 @@ function generateRandomColor () {
     return assignColorFromArray(rgb);
 }
 
-
 function changeElementColor (e) {
     const targetElement = e.target;
     let pases;
@@ -71,7 +70,7 @@ function changeElementColor (e) {
 function resetGrid() {
     const gridContainer = document.querySelector('.grid-container');
     gridContainer.innerHTML = ""
-    addGrid();
+    addGrid(currentGridSize);
 }
 
 function flipGridX() {
@@ -90,7 +89,6 @@ function flipGridX() {
     });
     
 }
-
 
 function flipGridY() {
     let gridStack = [];
@@ -147,6 +145,42 @@ function flipDiag() {
     }
 }
 
+function flipDiagRev() {
+    const gridRows = document.querySelectorAll('.grid-row');
+    let gridRowsArr = [];
+    
+    gridRows.forEach(row => {
+        gridRowsArr.push(Array.from(row.children));
+    })
+
+    const gridSize = gridRowsArr.length;
+    let newGridRow;
+    let currentRow;
+
+    const gridContainer = document.querySelector('.grid-container');
+    gridContainer.innerHTML = "";
+
+
+    for (let i = 0; i < gridSize; i++) {
+        newGridRow = document.createElement('div');
+        newGridRow.classList.add('grid-row');
+
+        for (let j = 0; j < gridSize; j++) {
+            newGridRow.insertBefore(gridRowsArr[j][i], newGridRow.firstChild)
+        }
+
+        gridContainer.insertBefore(newGridRow, gridContainer.firstChild);
+    }
+}
+
+function processSlider (e) {
+    currentGridSize = e.target.valueAsNumber;
+    resetGrid();
+    const updateText = document.querySelector('.slidecontainer p');
+    updateText.innerHTML = `Current grid size is ${currentGridSize}.`
+        
+}
+
 const resetButton = document.querySelector('.button-reset')
 resetButton.addEventListener('click', resetGrid);
 
@@ -156,5 +190,15 @@ flipxButton.addEventListener('click', flipGridX);
 const flipyButton = document.querySelector('.button-flipy')
 flipyButton.addEventListener('click', flipGridY);
 
-const flipUlBr = document.querySelector('.button-flipDiag')
-flipUlBr.addEventListener('click', flipDiag);
+const flipDiagonal = document.querySelector('.button-flipDiag')
+flipDiagonal.addEventListener('click', flipDiag);
+
+const flipDiagonalRev = document.querySelector('.button-flipDiagRev')
+flipDiagonalRev.addEventListener('click', flipDiagRev);
+
+const slider = document.getElementById('gridSlider');
+
+slider.addEventListener('change', processSlider);
+
+document.addEventListener('mousedown', () => {mouseDown = true})
+document.addEventListener('mouseup', () => {mouseDown = false})
